@@ -18,4 +18,15 @@
 
     {{ .Content }}
 </article>
+<script>
+    window.pageData = {
+        
+        "title": "{{ .Title }}",
+        "date": "{{ .Date }}",
+        {{- range $key, $value := .Params }}
+        "{{ $key }}": {{ jsonify $value }},
+        {{- end }}
+        "draft": {{ .Draft }}
+    };
+</script>
 {{ end }}
