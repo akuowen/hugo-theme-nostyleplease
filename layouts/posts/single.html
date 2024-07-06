@@ -19,5 +19,16 @@
     {{ .Content }}
 </article>
 
+<script>
+	window.pageData = {
+        "title": {{ .Title | safeJS }},
+        "date": "{{ .Date }}",
+        {{- range $key, $value := .Params }}
+        "{{ $key }}": {{ $value | jsonify | safeJS }},
+        {{- end }}
+        "draft": {{ .Draft | safeJS }}
+    };
+</script>
+
 
 {{ end }}
