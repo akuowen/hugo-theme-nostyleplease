@@ -2,7 +2,13 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  {{ if .IsPage }} <meta name="description" content="{{ .Summary }}">  {{ end }}
+  {{ if .IsPage }}
+    {{ $description := .Summary }}
+    {{ if .Params.encrypted }}
+      {{ $description = .Params.public_summary | default "此文章已加密" }}
+    {{ end }}
+    <meta name="description" content="{{ $description }}">
+  {{ end }}
 
   <title>
     {{ if not .IsHome }}
@@ -17,6 +23,10 @@
   {{ $options := (dict "outputStyle" "compressed" "enableSourceMap" (not hugo.IsProduction)) }}
   {{ $sass := resources.Get "css/main.scss" }}
   {{ $style := $sass | resources.ToCSS $options | resources.Fingerprint "sha512" }}
-  <link rel="stylesheet" href="{{ $style.Permalink | relURL }}" integrity="{{ $style.Data.Integrity }}" />
+  <style>{{ $style.Content | safeCSS }}</style>
+  {{ if .Params.encrypted }}
+    {{ $encryptedStyle := resources.Get "css/encrypted-content.css" | resources.Fingerprint "sha512" }}
+    <style>{{ $encryptedStyle.Content | safeCSS }}</style>
+  {{ end }}
   {{ if .Params.mathjax }} {{ partial "mathjax.html" . }} {{ end }}
 </head>
