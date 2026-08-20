@@ -1,0 +1,13 @@
+{{- $extra := partial "extra-config.html" . -}}
+{{- $assets := dict
+    "watermark" "js/watermark.js"
+    "nocopy" "js/nocopy.js"
+    "mouse_coords" "js/mouse_coords.js"
+    "encryption" "js/encrypted-content.js"
+-}}
+{{- range $feature := $extra.enabled -}}
+    {{- with index $assets $feature -}}
+        {{- $js := resources.Get . -}}
+        <script type="text/javascript" src="{{ $js.RelPermalink }}"></script>
+    {{- end -}}
+{{- end -}}

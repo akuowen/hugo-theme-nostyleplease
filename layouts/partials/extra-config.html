@@ -1,0 +1,4 @@
+{{- $raw := .Params.extra | default dict -}}
+{{- $enabled := index $raw "enable" | default slice -}}
+{{- $options := index $raw "options" | default dict -}}
+{{- return (dict "enabled" $enabled "options" $options) -}}

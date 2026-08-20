@@ -8,14 +8,5 @@
             </div>
         </main>
     </body>
-    {{- if .Params.custom_js -}}
-        {{- range .Params.custom_js -}}
-            {{ $js := resources.Get (print "js/" . ".js") }}
-            <script type="text/javascript" src="{{ $js.RelPermalink }}"></script>
-        {{- end -}}
-    {{- end -}}
-    {{- if .Params.encrypted -}}
-        {{ $encryptedJs := resources.Get "js/encrypted-content.js" }}
-        <script type="text/javascript" src="{{ $encryptedJs.RelPermalink }}"></script>
-    {{- end -}}
+    {{- partial "extra-assets.html" . -}}
 </html>

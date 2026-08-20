@@ -58,7 +58,11 @@ function useWatermark(appendEl = document.body) {
 
     const createWatermark = (str) => {
         if (watermarkEl) {
-            updateWatermark({str});
+            updateWatermark({
+                str,
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
             return id;
         }
         const div = document.createElement("div");
@@ -88,7 +92,10 @@ function useWatermark(appendEl = document.body) {
 }
 
 function refreshPageWatermark() {
-    var watermark = (window.pageData && window.pageData.wm) || "akuowen";
+    var watermark = window.pageData &&
+        window.pageData.extra &&
+        window.pageData.extra.watermark &&
+        window.pageData.extra.watermark.text || "akuowen";
     useWatermark().setWatermark(watermark);
 }
 

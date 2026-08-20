@@ -1,11 +1,14 @@
 <head>
+  {{ $extra := partial "extra-config.html" . }}
+  {{ $encrypted := in $extra.enabled "encryption" }}
+  {{ $encryption := index $extra.options "encryption" | default dict }}
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   {{ if .IsPage }}
     {{ $description := .Summary }}
-    {{ if .Params.encrypted }}
-      {{ $description = .Params.public_summary | default "此文章已加密" }}
+    {{ if $encrypted }}
+      {{ $description = index $encryption "public_summary" | default "此文章已加密" }}
     {{ end }}
     <meta name="description" content="{{ $description }}">
   {{ end }}
@@ -24,7 +27,7 @@
   {{ $sass := resources.Get "css/main.scss" }}
   {{ $style := $sass | resources.ToCSS $options | resources.Fingerprint "sha512" }}
   <style>{{ $style.Content | safeCSS }}</style>
-  {{ if .Params.encrypted }}
+  {{ if $encrypted }}
     {{ $encryptedStyle := resources.Get "css/encrypted-content.css" | resources.Fingerprint "sha512" }}
     <style>{{ $encryptedStyle.Content | safeCSS }}</style>
   {{ end }}
