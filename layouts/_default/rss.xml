@@ -32,8 +32,10 @@
       <pubDate>{{ .PublishDate.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
       <guid>{{ .Permalink }}</guid>
       {{- $description := .Summary -}}
-      {{- if .Params.encrypted -}}
-        {{- $description = .Params.public_summary | default "此文章已加密" -}}
+      {{- $extra := partial "extra-config.html" . -}}
+      {{- if in $extra.enabled "encryption" -}}
+        {{- $encryption := index $extra.options "encryption" | default dict -}}
+        {{- $description = index $encryption "public_summary" | default "此文章已加密" -}}
       {{- end }}
       <description>{{ $description | html }}</description>
     </item>

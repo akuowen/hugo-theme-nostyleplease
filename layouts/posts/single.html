@@ -1,5 +1,9 @@
 {{ define "main" }}
 {{ partial "back_link.html" .}}
+{{ $extra := partial "extra-config.html" . }}
+{{ $encrypted := in $extra.enabled "encryption" }}
+{{ $encryption := index $extra.options "encryption" | default dict }}
+{{ $watermark := index $extra.options "watermark" | default dict }}
 
 <article>
     <p class="post-meta">
@@ -10,15 +14,15 @@
 
     <h1>{{ .Title }}</h1>
 
-    {{ if .Params.encrypted }}
+    {{ if $encrypted }}
         {{ if eq (getenv "HUGO_ENCRYPTION_BUILD") "1" }}
-            <encrypted-content-source data-password-id="{{ .Params.password_id }}" data-encrypted-hint="{{ .Params.encrypted_hint }}">
+            <encrypted-content-source data-password-id="{{ index $encryption "password_id" }}" data-encrypted-hint="{{ index $encryption "hint" }}">
             {{ .Content }}
             </encrypted-content-source>
         {{ else }}
             <section class="encrypted-content" data-encrypted-content>
                 <p class="encrypted-title">本文已加密</p>
-                {{ with .Params.encrypted_hint }}<p class="encrypted-hint">{{ . }}</p>{{ end }}
+                {{ with index $encryption "hint" }}<p class="encrypted-hint">{{ . }}</p>{{ end }}
                 <p>请使用加密构建入口生成可解锁的发布产物。</p>
             </section>
         {{ end }}
@@ -37,17 +41,17 @@
     window.pageData = {
         "title": {{ .Title | jsonify | safeJS }},
         "date": {{ .Date | jsonify | safeJS }},
-        "encrypted": {{ default false .Params.encrypted | jsonify | safeJS }},
+        "encrypted": {{ $encrypted | jsonify | safeJS }},
         "draft": {{ .Draft | jsonify | safeJS }}
-        {{- with .Params.public_summary }},
-        "public_summary": {{ . | jsonify | safeJS }}
-        {{- end }}
-        {{- with .Params.encrypted_hint }},
-        "encrypted_hint": {{ . | jsonify | safeJS }}
-        {{- end }}
-        {{- with .Params.wm }},
-        "wm": {{ . | jsonify | safeJS }}
-        {{- end }}
+        {{- with index $encryption "public_summary" }},
+        "public_summary": {{ . | jsonify | safeJS }}{{ end }}
+        {{- with index $encryption "hint" }},
+        "encrypted_hint": {{ . | jsonify | safeJS }}{{ end }},
+        "extra": {
+            "watermark": {
+                "text": {{ index $watermark "text" | default "akuowen" | jsonify | safeJS }}
+            }
+        }
     };
 </script>
 
