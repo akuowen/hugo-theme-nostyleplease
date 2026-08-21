@@ -1,0 +1,57 @@
+.mermaid {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  text-align: center;
+}
+
+.mermaid svg {
+  cursor: zoom-in;
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.mermaid svg:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.mermaid-lightbox {
+  background: Canvas;
+  border: 0;
+  color: CanvasText;
+  height: calc(100vh - 2rem);
+  max-height: none;
+  max-width: none;
+  padding: 2.5rem 1rem 1rem;
+  width: calc(100vw - 2rem);
+}
+
+.mermaid-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.mermaid-lightbox__close {
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.5rem;
+}
+
+.mermaid-lightbox__content {
+  height: 100%;
+  overflow: auto;
+  width: 100%;
+}
+
+.mermaid-lightbox__content svg {
+  cursor: default;
+  display: block;
+  margin: 0 auto;
+  max-width: none;
+}

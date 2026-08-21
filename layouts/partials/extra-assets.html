@@ -6,8 +6,15 @@
     "encryption" "js/encrypted-content.js"
 -}}
 {{- range $feature := $extra.enabled -}}
-    {{- with index $assets $feature -}}
-        {{- $js := resources.Get . -}}
-        <script type="text/javascript" src="{{ $js.RelPermalink }}"></script>
+    {{- if eq $feature "mermaid" -}}
+        {{- $mermaid := resources.Get "vendor/mermaid/mermaid.min.js" | resources.Fingerprint "sha512" -}}
+        <script type="text/javascript" src="{{ $mermaid.RelPermalink }}" integrity="{{ $mermaid.Data.Integrity }}"></script>
+        {{- $mermaidInit := resources.Get "js/mermaid-init.js" -}}
+        <script type="text/javascript" src="{{ $mermaidInit.RelPermalink }}"></script>
+    {{- else -}}
+        {{- with index $assets $feature -}}
+            {{- $js := resources.Get . -}}
+            <script type="text/javascript" src="{{ $js.RelPermalink }}"></script>
+        {{- end -}}
     {{- end -}}
 {{- end -}}

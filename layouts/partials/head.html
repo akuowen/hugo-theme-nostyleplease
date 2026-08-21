@@ -31,5 +31,9 @@
     {{ $encryptedStyle := resources.Get "css/encrypted-content.css" | resources.Fingerprint "sha512" }}
     <style>{{ $encryptedStyle.Content | safeCSS }}</style>
   {{ end }}
+  {{ if in $extra.enabled "mermaid" }}
+    {{ $mermaidStyle := resources.Get "css/mermaid.css" | resources.Minify | resources.Fingerprint "sha512" }}
+    <style>{{ $mermaidStyle.Content | safeCSS }}</style>
+  {{ end }}
   {{ if .Params.mathjax }} {{ partial "mathjax.html" . }} {{ end }}
 </head>
